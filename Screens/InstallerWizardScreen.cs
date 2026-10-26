@@ -30,6 +30,27 @@ namespace Ez3Di.Installer.Screens
             {
                 try
                 {
+                    // 1. Instant Win32 lookup (bypasses any UIA desktop search)
+                    IntPtr fastHwnd = NativeMethods.FindWindow(null, "Ez3D-i - InstallShield Wizard");
+                    if (fastHwnd == IntPtr.Zero)
+                        fastHwnd = NativeMethods.FindWindow(null, "Choose Setup Language");
+
+                    if (fastHwnd != IntPtr.Zero && WindowHelper.IsVisibleOnAnyScreen(fastHwnd))
+                    {
+                        Console.WriteLine($"[InstallerWizardScreen] Instant Win32 match found (HWND: 0x{fastHwnd:X8}).");
+                        var activeScreen = WindowHelper.GetScreenForHwnd(fastHwnd);
+                        WindowHelper.CenterWindowOnMonitor(fastHwnd, activeScreen);
+                        InputDriver.PinWindowOnTop(fastHwnd);
+
+                        try
+                        {
+                            CurrentWindow = Automation.FromHandle(fastHwnd).AsWindow();
+                            return CurrentWindow;
+                        }
+                        catch { }
+                    }
+
+                    // 2. Fallback: Search desktop windows with strict exclusion of VS Code / IDE
                     var desktop = Automation.GetDesktop();
                     var windows = desktop.FindAllChildren(cf => cf.ByControlType(ControlType.Window));
 
@@ -37,23 +58,38 @@ namespace Ez3Di.Installer.Screens
                     {
                         try
                         {
-                            string name = w.Name ?? "";
-                            string cls = w.ClassName ?? "";
+                            string name = (w.Name ?? "").Trim();
+                            string cls = (w.ClassName ?? "").Trim();
 
-                            // InstallShield wizards typically have titles like 'Ez3D-i - InstallShield Wizard', 'Choose Setup Language', etc.
-                            if (name.Contains("Ez3D-i", StringComparison.OrdinalIgnoreCase) ||
-                                name.Contains("InstallShield", StringComparison.OrdinalIgnoreCase) ||
-                                name.Contains("Setup", StringComparison.OrdinalIgnoreCase) ||
-                                cls.Contains("InstallShield", StringComparison.OrdinalIgnoreCase) ||
-                                cls == "#32770")
+                            // EXCLUDE VS Code, browsers, and explorer
+                            if (name.Contains("Visual Studio Code", StringComparison.OrdinalIgnoreCase) ||
+                                name.Contains(".Installer", StringComparison.OrdinalIgnoreCase) ||
+                                name.Contains(".csproj", StringComparison.OrdinalIgnoreCase) ||
+                                cls == "Chrome_WidgetWin_1" ||
+                                cls == "CabinetWClass")
+                            {
+                                continue;
+                            }
+
+                            // Match genuine InstallShield wizard dialog
+                            bool isMatch = name.Contains("InstallShield Wizard", StringComparison.OrdinalIgnoreCase) ||
+                                           name.Contains("Choose Setup Language", StringComparison.OrdinalIgnoreCase) ||
+                                           (cls == "#32770" && name.StartsWith("Ez3D-i", StringComparison.OrdinalIgnoreCase));
+
+                            if (isMatch)
                             {
                                 var win = w.AsWindow();
-                                if (!win.IsOffscreen && win.BoundingRectangle.Width > 200 && win.BoundingRectangle.Height > 150)
+                                IntPtr hwnd = WindowHelper.GetHwnd(win);
+                                bool isVisible = hwnd != IntPtr.Zero ? WindowHelper.IsVisibleOnAnyScreen(hwnd) : (win.BoundingRectangle.Width > 180);
+
+                                if (isVisible && win.BoundingRectangle.Width > 180 && win.BoundingRectangle.Height > 120)
                                 {
                                     CurrentWindow = win;
-                                    IntPtr hwnd = WindowHelper.GetHwnd(win);
                                     if (hwnd != IntPtr.Zero)
                                     {
+                                        var activeScreen = WindowHelper.GetScreenForHwnd(hwnd);
+                                        Console.WriteLine($"[InstallerWizardScreen] Captured true wizard '{win.Name}' on monitor: {activeScreen.DeviceName} (Bounds: {activeScreen.Bounds})");
+                                        WindowHelper.CenterWindowOnMonitor(hwnd, activeScreen);
                                         InputDriver.PinWindowOnTop(hwnd);
                                     }
                                     return CurrentWindow;
@@ -66,6 +102,34 @@ namespace Ez3Di.Installer.Screens
                 catch { }
 
                 Thread.Sleep(500);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Locates a button by native Win32 child enumeration first, then FlaUI UIA3.
+        /// Returns screen coordinates for physical cursor click.
+        /// </summary>
+        public System.Drawing.Point? FindButtonCoordinate(params string[] buttonTexts)
+        {
+            if (CurrentWindow == null) return null;
+
+            IntPtr hwnd = WindowHelper.GetHwnd(CurrentWindow);
+
+            // 1. Native Win32 child button lookup (fastest & most reliable)
+            if (hwnd != IntPtr.Zero)
+            {
+                var pt = WindowHelper.FindChildButtonCoordinate(hwnd, buttonTexts);
+                if (pt != null) return pt;
+            }
+
+            // 2. FlaUI UIA3 lookup
+            var btn = FindButton(buttonTexts);
+            if (btn != null)
+            {
+                var r = btn.BoundingRectangle;
+                return new System.Drawing.Point((int)(r.Left + r.Width / 2), (int)(r.Top + r.Height / 2));
             }
 
             return null;
@@ -88,7 +152,7 @@ namespace Ez3Di.Installer.Screens
                             if (name.Equals(expected, StringComparison.OrdinalIgnoreCase) ||
                                 name.Contains(expected, StringComparison.OrdinalIgnoreCase))
                             {
-                                if (btn.IsEnabled && !btn.IsOffscreen)
+                                if (btn.IsEnabled && (btn.BoundingRectangle.Width > 0 || !btn.IsOffscreen))
                                 {
                                     return btn.AsButton();
                                 }

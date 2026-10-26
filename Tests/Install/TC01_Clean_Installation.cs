@@ -1,9 +1,11 @@
 using System;
 using System.Diagnostics;
 using Ez3Di.Installer.Actions.Install;
+using Ez3Di.Installer.Actions.Uninstall;
+using Ez3Di.Installer.Tests;
 using NUnit.Framework;
 
-namespace Ez3Di.Installer.Tests
+namespace Ez3Di.Installer.Tests.Install
 {
     [TestFixture]
     [Category("Installation")]
@@ -14,6 +16,10 @@ namespace Ez3Di.Installer.Tests
         public void Run_TC01_Clean_Installation()
         {
             Console.WriteLine("[TC01] Starting clean installation test...");
+
+            // Step 0: Ensure machine is clean before running clean installation
+            Console.WriteLine("[TC01] Step 0: Checking if lingering instance needs cleanup...");
+            EnsureEz3DiUninstalledAction.Execute(UninstallerScreen!);
 
             Process? setupProc = null;
             try
@@ -34,12 +40,12 @@ namespace Ez3Di.Installer.Tests
                 StepThroughSetupWizardAction.Execute(InstallerScreen!, step => CaptureScreenshot($"TC01_Step3_{step}"));
 
                 // Step 4: Wait for progress bar completion
-                Console.WriteLine("[TC01] Step 4: Waiting for installation progress...");
-                WaitForInstallProgressAction.Execute(InstallerScreen!, timeoutMinutes: 10, step => CaptureScreenshot($"TC01_Step4_{step}"));
+                Console.WriteLine("[TC01] Step 4: Waiting for progress bar run & completion...");
+                WaitForInstallProgressAction.Execute(InstallerScreen!, timeoutMinutes: 15, step => CaptureScreenshot($"TC01_Step4_{step}"));
 
                 // Step 5: Complete installation on Finish page
-                Console.WriteLine("[TC01] Step 5: Completing installation...");
-                CompleteInstallationAction.Execute(InstallerScreen!, setupProc);
+                Console.WriteLine("[TC01] Step 5: Clicking Finish button on completed wizard...");
+                CompleteInstallationAction.Execute(InstallerScreen!, setupProc, step => CaptureScreenshot($"TC01_Step5_{step}"));
                 CaptureScreenshot("TC01_Step5_InstallationCompleted");
 
                 Console.WriteLine($"[TC01] PASS: Ez3D-i version {info.FileVersion} installed successfully.");

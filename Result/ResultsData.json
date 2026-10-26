@@ -1,0 +1,90 @@
+{
+  "Run_TC02_Post_Install_Verify": {
+    "TestName": "Run_TC02_Post_Install_Verify",
+    "Status": "PASSED",
+    "Details": "",
+    "Timestamp": "2026-10-26 15:13:12",
+    "Screenshots": [
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC02_Post_Install_Verify\\TC02_Step1_PreVerification.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC02_Post_Install_Verify\\TC02_Step2_PostVerification.png"
+    ]
+  },
+  "Run_TC01_Clean_Installation": {
+    "TestName": "Run_TC01_Clean_Installation",
+    "Status": "PASSED",
+    "Details": "",
+    "Timestamp": "2026-10-26 15:13:12",
+    "Screenshots": [
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC01_Clean_Installation\\TC01_Step1_InstallerLaunched.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC01_Clean_Installation\\TC01_Step2_LanguageHandled.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC01_Clean_Installation\\TC01_Step3_Step2_LicenseAccepted.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC01_Clean_Installation\\TC01_Step4_ProgressBarRunning.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC01_Clean_Installation\\TC01_Step4_ProgressFinished.png"
+    ]
+  },
+  "Run_TC03_Uninstall_Control_Panel": {
+    "TestName": "Run_TC03_Uninstall_Control_Panel",
+    "Status": "PASSED",
+    "Details": "",
+    "Timestamp": "2026-10-26 15:13:18",
+    "Screenshots": [
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC03_Uninstall_Control_Panel\\TC03_Step1_UninstallerLaunched.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC03_Uninstall_Control_Panel\\TC03_Step2_ProgressCompleted.png"
+    ]
+  },
+  "Run_TC04_Uninstall_Rerun_Package": {
+    "TestName": "Run_TC04_Uninstall_Rerun_Package",
+    "Status": "PASSED",
+    "Details": "",
+    "Timestamp": "2026-10-26 15:14:50",
+    "Screenshots": [
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC04_Uninstall_Rerun_Package\\TC04_PrereqInstall_Launched.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC04_Uninstall_Rerun_Package\\TC04_PrereqInstall_Step2_LicenseAccepted.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC04_Uninstall_Rerun_Package\\TC04_PrereqInstall_ProgressBarRunning.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC04_Uninstall_Rerun_Package\\TC04_PrereqInstall_ProgressFinished.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC04_Uninstall_Rerun_Package\\TC04_Step1_PackageLaunched.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC04_Uninstall_Rerun_Package\\TC04_Step2_LanguageHandled.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC04_Uninstall_Rerun_Package\\TC04_Step2_RemoveSelected.png"
+    ]
+  },
+  "Run_TC05_Full_Lifecycle": {
+    "TestName": "Run_TC05_Full_Lifecycle",
+    "Status": "PASSED",
+    "Details": "",
+    "Timestamp": "2026-10-26 15:15:52",
+    "Screenshots": [
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC05_Full_Lifecycle\\TC05_Phase1_Launched.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC05_Full_Lifecycle\\TC05_Phase1_Step2_LicenseAccepted.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC05_Full_Lifecycle\\TC05_Phase1_ProgressBarRunning.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC05_Full_Lifecycle\\TC05_Phase1_ProgressFinished.png"
+    ]
+  },
+  "Run_TC01_InPlace_Upgrade": {
+    "TestName": "Run_TC01_InPlace_Upgrade",
+    "Status": "PASSED",
+    "Details": "",
+    "Timestamp": "2026-10-26 13:55:12",
+    "Screenshots": [
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC01_InPlace_Upgrade\\TC_UP01_PrereqOldInstall_Launched.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC01_InPlace_Upgrade\\TC_UP01_PrereqOldInstall_Step2_LicenseAccepted.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC01_InPlace_Upgrade\\TC_UP01_PrereqOldInstall_ProgressBarRunning.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC01_InPlace_Upgrade\\TC_UP01_PrereqOldInstall_ProgressFinished.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC01_InPlace_Upgrade\\TC_UP01_Step1_UpgradeLaunched.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC01_InPlace_Upgrade\\TC_UP01_Step2_LanguageHandled.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC01_InPlace_Upgrade\\TC_UP01_Step4_ProgressBarRunning.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC01_InPlace_Upgrade\\TC_UP01_Step4_ProgressFinished.png"
+    ]
+  },
+  "Run_TC06_Quick_Setting": {
+    "TestName": "Run_TC06_Quick_Setting",
+    "Status": "PASSED",
+    "Details": "",
+    "Timestamp": "2026-10-26 15:17:01",
+    "Screenshots": [
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC06_Quick_Setting\\TC06_PrereqInstall_Launched.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC06_Quick_Setting\\TC06_PrereqInstall_Step2_LicenseAccepted.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC06_Quick_Setting\\TC06_PrereqInstall_ProgressBarRunning.png",
+      "D:\\Ez3D-i.Installer\\Result\\Run_TC06_Quick_Setting\\TC06_PrereqInstall_ProgressFinished.png"
+    ]
+  }
+}

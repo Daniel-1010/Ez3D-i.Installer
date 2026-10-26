@@ -13,7 +13,7 @@ namespace Ez3Di.Installer.Actions.Uninstall
 
             // 1. Verify executable is removed
             string exePath = InstallerConstants.DefaultExecutablePath;
-            bool exeExists = File.Exists(exePath);
+            bool exeExists = File.Exists(exePath) || File.Exists(InstallerConstants.FallbackExecutablePath);
             Console.WriteLine($"[VerifyUninstallationStateAction] Main executable '{exePath}' exists: {exeExists}");
             Assert.That(exeExists, Is.False, $"Main executable still exists at '{exePath}' after uninstallation!");
 

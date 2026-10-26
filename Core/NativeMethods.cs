@@ -36,6 +36,19 @@ namespace Ez3Di.Installer.Core
         [DllImport("user32.dll")]
         public static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
 
+        public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool EnumChildWindows(IntPtr window, EnumWindowsProc callback, IntPtr lParam);
+
+        [DllImport("user32.dll")]
+        public static extern int GetDlgCtrlID(IntPtr hWnd);
+
         [DllImport("user32.dll")]
         public static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, bool fAttach);
 
@@ -57,14 +70,33 @@ namespace Ez3Di.Installer.Core
         [DllImport("user32.dll")]
         public static extern bool IsZoomed(IntPtr hWnd);
 
+        [DllImport("user32.dll")]
+        public static extern void SwitchToThisWindow(IntPtr hWnd, bool fAltTab);
+
+        [DllImport("user32.dll")]
+        public static extern bool AllowSetForegroundWindow(int dwProcessId);
+
+        [DllImport("user32.dll")]
+        public static extern bool LockSetForegroundWindow(uint uLockCode);
+
+        [DllImport("user32.dll")]
+        public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+
+        public const int ASFW_ANY     = -1;
+        public const uint LSFW_UNLOCK = 2;
+        public const byte VK_MENU     = 0x12; // ALT key
+        public const uint KEYEVENTF_KEYUP = 0x0002;
+
         public const int SW_RESTORE  = 9;
         public const int SW_MAXIMIZE = 3;
 
         public static readonly IntPtr HWND_TOPMOST   = new IntPtr(-1);
         public static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
+        public static readonly IntPtr HWND_BOTTOM    = new IntPtr(1);
 
-        public const uint SWP_NOSIZE   = 0x0001;
-        public const uint SWP_NOMOVE   = 0x0002;
+        public const uint SWP_NOSIZE     = 0x0001;
+        public const uint SWP_NOMOVE     = 0x0002;
+        public const uint SWP_NOACTIVATE = 0x0010;
         public const uint SWP_SHOWWINDOW = 0x0040;
 
         public const uint MOUSEEVENTF_LEFTDOWN  = 0x0002;

@@ -1,10 +1,12 @@
 using System;
 using Ez3Di.Installer.Actions.Verify;
+using Ez3Di.Installer.Tests;
 using NUnit.Framework;
 
-namespace Ez3Di.Installer.Tests
+namespace Ez3Di.Installer.Tests.Install
 {
     [TestFixture]
+    [Category("Installation")]
     [Category("Verification")]
     [Order(2)]
     public class TC02_Post_Install_Verify : BaseInstallerFixture

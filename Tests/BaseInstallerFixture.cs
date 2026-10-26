@@ -40,7 +40,17 @@ namespace Ez3Di.Installer.Tests
             try
             {
                 string filePath = Path.Combine(TestResultDirectory, $"{stepName}.png");
-                var bounds = Screen.PrimaryScreen?.Bounds ?? new Rectangle(0, 0, 1920, 1080);
+                Rectangle bounds;
+                var activeWindow = InstallerScreen?.CurrentWindow ?? UninstallerScreen?.CurrentWindow;
+                if (activeWindow != null)
+                {
+                    var targetScreen = WindowHelper.GetScreenForWindow(activeWindow);
+                    bounds = targetScreen.Bounds;
+                }
+                else
+                {
+                    bounds = SystemInformation.VirtualScreen;
+                }
 
                 using var bmp = new Bitmap(bounds.Width, bounds.Height);
                 using (var g = Graphics.FromImage(bmp))

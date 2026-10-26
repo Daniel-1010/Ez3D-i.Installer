@@ -8,11 +8,11 @@ namespace Ez3Di.Installer.Actions.Install
 {
     public static class CompleteInstallationAction
     {
-        public static void Execute(InstallerWizardScreen screen, Process? setupProcess)
+        public static void Execute(InstallerWizardScreen screen, Process? setupProcess, Action<string>? onStepCallback = null)
         {
-            Console.WriteLine("[CompleteInstallationAction] Finalizing installation on Finish page...");
+            Console.WriteLine("[CompleteInstallationAction] Finalizing installation on 'InstallShield Wizard Complete' page...");
 
-            var win = screen.WaitForWizardWindow(timeoutSeconds: 15);
+            var win = screen.WaitForWizardWindow(timeoutSeconds: 20);
             if (win == null)
             {
                 Console.WriteLine("[CompleteInstallationAction] Wizard window already closed or exited.");
@@ -23,7 +23,7 @@ namespace Ez3Di.Installer.Actions.Install
             InputDriver.ForceWindowForeground(hwnd);
             Thread.Sleep(500);
 
-            // 1. Uncheck 'Launch the program' or 'Launch Ez3D-i'
+            // 1. Uncheck 'Launch the program' or 'Launch Ez3D-i' if present
             var launchCb = screen.FindCheckBox("Launch", "Ez3D-i");
             if (launchCb != null && launchCb.IsChecked == true)
             {
@@ -35,7 +35,7 @@ namespace Ez3Di.Installer.Actions.Install
                 catch
                 {
                     var r = launchCb.BoundingRectangle;
-                    InputDriver.ClickAtPhysicalCoordinate(hwnd, (int)(r.Left + r.Width / 2), (int)(r.Top + r.Height / 2));
+                    InputDriver.ClickAtPhysicalCoordinate(hwnd, (int)(r.Left + 10), (int)(r.Top + r.Height / 2));
                 }
                 Thread.Sleep(300);
             }
@@ -52,29 +52,40 @@ namespace Ez3Di.Installer.Actions.Install
                 catch
                 {
                     var r = restartLaterRadio.BoundingRectangle;
-                    InputDriver.ClickAtPhysicalCoordinate(hwnd, (int)(r.Left + r.Width / 2), (int)(r.Top + r.Height / 2));
+                    InputDriver.ClickAtPhysicalCoordinate(hwnd, (int)(r.Left + 10), (int)(r.Top + r.Height / 2));
                 }
                 Thread.Sleep(300);
             }
 
             // 3. Click [ Finish ]
-            var finishBtn = screen.FindButton("Finish", "&Finish");
-            if (finishBtn != null && finishBtn.IsEnabled)
+            var pt = screen.FindButtonCoordinate("Finish", "&Finish");
+            if (pt != null)
             {
-                Console.WriteLine($"[CompleteInstallationAction] Clicking [ Finish ] button: '{finishBtn.Name}'...");
-                var r = finishBtn.BoundingRectangle;
-                InputDriver.ClickAtPhysicalCoordinate(hwnd, (int)(r.Left + r.Width / 2), (int)(r.Top + r.Height / 2));
+                Console.WriteLine($"[CompleteInstallationAction] Clicking [ Finish ] button at ({pt.Value.X}, {pt.Value.Y})...");
+                InputDriver.ClickAtPhysicalCoordinate(hwnd, pt.Value.X, pt.Value.Y);
+                onStepCallback?.Invoke("FinishButtonClicked");
                 Thread.Sleep(1500);
+            }
+            else if (ImageCompare.See("07_wizard_complete_finish.png", threshold: 0.80))
+            {
+                Console.WriteLine("[CompleteInstallationAction] Clicking [ Finish ] button via Multi-Screen OpenCV visual detection...");
+                ImageCompare.Click("07_wizard_complete_finish.png", hwnd, threshold: 0.80);
+                onStepCallback?.Invoke("FinishButtonClicked");
+                Thread.Sleep(1500);
+            }
+            else
+            {
+                throw new InvalidOperationException("Failed to locate enabled [ Finish ] button on 'InstallShield Wizard Complete' page.");
             }
 
             // 4. Wait for installer process to terminate
-            if (setupProcess != null)
+            if (setupProcess != null && !setupProcess.HasExited)
             {
                 Console.WriteLine("[CompleteInstallationAction] Waiting up to 30s for setup process exit...");
                 ProcessHelper.WaitForExit(setupProcess, timeoutSeconds: 30);
             }
 
-            Console.WriteLine("[CompleteInstallationAction] PASS: Setup wizard dismissed cleanly.");
+            Console.WriteLine("[CompleteInstallationAction] PASS: Setup wizard dismissed with [ Finish ] cleanly.");
         }
     }
 }

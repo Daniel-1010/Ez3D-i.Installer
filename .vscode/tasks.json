@@ -1,0 +1,149 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Solution",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/Ez3D-i.Installer.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Run All 6 Install Cases (TC01–TC06)",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "${workspaceFolder}/Ez3D-i.Installer.csproj",
+                "--filter",
+                "Category=Installation",
+                "--logger",
+                "console;verbosity=normal"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Run TC01: Clean Installation",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "${workspaceFolder}/Ez3D-i.Installer.csproj",
+                "--filter",
+                "FullyQualifiedName~TC01_Clean_Installation",
+                "--logger",
+                "console;verbosity=normal"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Run TC02: Post-Install Verify",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "${workspaceFolder}/Ez3D-i.Installer.csproj",
+                "--filter",
+                "FullyQualifiedName~TC02_Post_Install_Verify",
+                "--logger",
+                "console;verbosity=normal"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Run TC03: Uninstall Control Panel",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "${workspaceFolder}/Ez3D-i.Installer.csproj",
+                "--filter",
+                "FullyQualifiedName~TC03_Uninstall_Control_Panel",
+                "--logger",
+                "console;verbosity=normal"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Run TC04: Uninstall Rerun Package",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "${workspaceFolder}/Ez3D-i.Installer.csproj",
+                "--filter",
+                "FullyQualifiedName~TC04_Uninstall_Rerun_Package",
+                "--logger",
+                "console;verbosity=normal"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Run TC05: Full Lifecycle",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "${workspaceFolder}/Ez3D-i.Installer.csproj",
+                "--filter",
+                "FullyQualifiedName~TC05_Full_Lifecycle",
+                "--logger",
+                "console;verbosity=normal"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Run TC06: Quick Setting (1st Launch)",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "${workspaceFolder}/Ez3D-i.Installer.csproj",
+                "--filter",
+                "FullyQualifiedName~TC06_Quick_Setting",
+                "--logger",
+                "console;verbosity=normal"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Upgrade Suite (TC01)",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "${workspaceFolder}/Ez3D-i.Installer.csproj",
+                "--filter",
+                "Category=Upgrade",
+                "--logger",
+                "console;verbosity=normal"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Run All Tests",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "${workspaceFolder}/Ez3D-i.Installer.csproj",
+                "--logger",
+                "console;verbosity=normal"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}
