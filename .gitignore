@@ -1,0 +1,26 @@
+# Build results
+bin/
+obj/
+TestResults/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Scratch & temporary artifacts
+scratch/
+*.log
+
+# Installer binaries in package folder (large executables tracked separately or placed locally)
+# Keep the folder structure tracked via .gitkeep
+Installation Package/*.exe
