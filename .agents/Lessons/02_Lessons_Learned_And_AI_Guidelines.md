@@ -113,6 +113,18 @@ To prevent CLI filter exclusions when running suite-level batch tests:
 * Apply additional granular sub-categories as secondary attributes (`[Category("Uninstallation")]`, `[Category("Verification")]`, `[Category("Lifecycle")]`) to preserve isolated execution capability for targeted debug runs.
 * Never use divergent or mutually exclusive category strings for tests that belong to the same logical suite.
 
+### 18. Large Binary Management and Git Ignored Package Directory Protocol
+* Never commit installer executable binaries (`*.exe`) larger than 100 MB to GitHub repositories.
+* Enforce `Installation Package/**/*.exe` in `.gitignore` at all times.
+* Retain folder structure across git clones using empty `.gitkeep` markers.
+* Provide clear instructions in `GUIDE/README.md` and `DOCUMENT/` on how to download or place necessary setup binaries locally.
+
+### 19. GitHub Repository Remote Validation & Provisioning Verification
+* Before initiating a push to newly created GitHub remotes, verify credential manager mapping and validate remote readiness with `git ls-remote origin`.
+* If GitHub returns transient 404 / "Repository not found" on a newly created private repository, wait for backend metadata synchronization to complete before attempting push.
+* Ensure branch naming adheres to repository standards (`main` vs `master`) using `git branch -M main`.
+
+
 
 
 

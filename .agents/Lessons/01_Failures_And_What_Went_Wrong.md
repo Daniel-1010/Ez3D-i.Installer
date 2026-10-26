@@ -104,6 +104,17 @@ This document records architectural failures, automation bugs, timing anomalies,
 * **Root Cause:** Test fixtures were tagged with disjoint Category strings (`TC02` with `"Verification"`, `TC03`/`TC04` with `"Uninstallation"`, `TC05` with `"Lifecycle"`). Because NUnit `--filter "Category=..."` performs an exact string equality check on each fixture's declared categories, any fixture lacking the specific tag `"Installation"` was completely omitted from the test run.
 * **Resolution:** Unified the suite-level category by adding `[Category("Installation")]` to all 6 test fixtures in `Tests/Install/` while preserving granular sub-category tags (`[Category("Uninstallation")]`, etc.). This enables both suite-wide batch execution and targeted single-workflow execution.
 
+### 19. GitHub 100 MB File Rejection on Installer Setup Executables
+* **Symptom:** Attempting to commit and push the repository containing installer packages like `Ez3D-i V5.5.15.1 Setup(x64).exe` (~956 MB) causes GitHub to fail the push with `remote: error: GH001: Large files detected. File ... is 956 MB; this exceeds GitHub's file size limit of 100.00 MB`.
+* **Root Cause:** GitHub imposes a hard 100 MB limit per file in git repositories. Installer test fixtures require setup `.exe` binaries on the local test runner machine, but committing them directly bloats repository size and violates GitHub push limits.
+* **Resolution:** Added `Installation Package/**/*.exe` to `.gitignore` so all current and future setup executables are strictly ignored by Git while retaining folder placeholders with `.gitkeep`.
+
+### 20. Transient 404 / 'Repository Not Found' on Newly Provisioned Private Repositories
+* **Symptom:** Immediate invocation of `git push` or `git ls-remote` right after repository creation on GitHub returns `remote: Repository not found.` / `fatal: repository '...' not found`.
+* **Root Cause:** GitHub private repositories return HTTP 404 for any unauthenticated request or while backend metadata propagation is finalizing across GitHub's CDN clusters (typically taking 3–10 seconds after creation).
+* **Resolution:** Implemented reachability probing via `git ls-remote origin` until exit code 0 is confirmed, then dispatched `git push -u origin main`.
+
+
 
 
 
